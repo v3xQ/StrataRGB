@@ -1,0 +1,23 @@
+<service>
+  <id>stratargb</id>
+  <name>StrataRGB Status Lights</name>
+  <description>Sets OpenRGB device colors from Strata inference-engine status (Reading=blue, Thinking=yellow, Answering=green, Idle=red).</description>
+
+  <!-- Rename WinSW-x64.exe from https://github.com/winsw/winsw/releases to stratargb.exe
+       next to this file. Install: stratargb.exe install; start: stratargb.exe start -->
+
+  <!-- pythonw.exe from the project venv; console-free. WorkingDirectory puts the
+       package + config.yaml on the path for `python -m strata_rgb`. -->
+  <workingdirectory>C:\StrataRGB</workingdirectory>
+  <executable>C:\StrataRGB\venv\Scripts\pythonw.exe</executable>
+  <arguments>-m strata_rgb --config C:\StrataRGB\config.yaml</arguments>
+
+  <onfailure action="restart" delay="10 sec"/>
+  <onfailure action="restart" delay="30 sec"/>
+  <resetfailure>1 hour</resetfailure>
+
+  <log mode="roll-by-size">
+    <sizeThreshold>10240</sizeThreshold>
+    <keepFiles>5</keepFiles>
+  </log>
+</service>

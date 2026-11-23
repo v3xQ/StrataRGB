@@ -1,0 +1,36 @@
+# StrataRGB configuration. Every key shown with its default; an empty
+# file is valid. CLI flags override these values.
+
+status_url: http://127.0.0.1:8080/metrics
+state_path: live.state    # dot-path into the JSON payload driving the color
+phase_path: live.phase    # specific label matched FIRST (e.g. "thinking"
+                          # while state is the coarse "generating")
+poll_seconds: 5.0
+request_timeout_s: 3.0
+
+openrgb:
+  host: 127.0.0.1
+  port: 6742            # OpenRGB SDK server port (Settings -> General -> Server)
+  client_name: StrataRGB
+
+colors:                 # [r, g, b] per state
+  reading: [0, 0, 255]    # blue
+  thinking: [255, 255, 0] # yellow
+  answering: [0, 255, 0]  # green
+  idle: [255, 0, 0]       # red
+
+# Ordered substring rules. The phase_path value is matched first (it is the
+# specific label, e.g. live.phase="thinking" while live.state="generating");
+# if it is absent/unmatched, the state_path value is tried. First match wins.
+# Every transition logs the raw pair, so tune from the log lines.
+# phase_rules:
+#   - {contains: read, state: reading}
+#   - {contains: think, state: thinking}
+#   - {contains: generat, state: answering}
+#   - {contains: idle, state: idle}
+
+fallback_state: thinking      # both values missing/unrecognized
+unreachable_state: idle       # /metrics not answering (engine down)
+
+log_file: stratargb.log
+log_level: INFO
